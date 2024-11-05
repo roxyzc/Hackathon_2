@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { UserService } from 'src/domain/user/user.service';
+import { TokenService } from 'src/infrastructure/authentication/token/token.service';
 import * as bcrypt from 'bcrypt';
 
 interface IUser {
@@ -21,6 +22,7 @@ export class AuthService {
   constructor(
     private readonly entityManager: EntityManager,
     private readonly userService: UserService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async register(data: IUser) {
@@ -63,9 +65,16 @@ export class AuthService {
         throw new BadRequestException('Incorrect password, please try again');
       }
 
+      const token = await this.tokenService.generateToken({
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      });
+
       return {
         msg: 'Login successful',
         success: true,
+        token,
       };
     } catch (error) {
       throw error;
