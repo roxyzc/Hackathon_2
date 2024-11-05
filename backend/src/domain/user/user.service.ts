@@ -6,8 +6,8 @@ import { EntityManager } from 'typeorm';
 @Injectable()
 export class UserService {
   constructor(
-    private readonly userRepository: UserRepository,
     private readonly entityManager: EntityManager,
+    private readonly userRepository: UserRepository,
   ) {}
 
   createTransactionUser({
@@ -56,10 +56,56 @@ export class UserService {
     }
   }
 
-  async existByUsername(username: string) {
+  async findOneById(user_id: string): Promise<User> {
+    try {
+      const data = await this.userRepository.findOne(user_id);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async existById(user_id: string): Promise<boolean> {
+    try {
+      const data = await this.userRepository.exist(user_id);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async existByUsername(username: string): Promise<boolean> {
     try {
       const data = await this.userRepository.exist(username);
       return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateProfile(
+    id: string,
+    payload: {
+      phone?: string;
+      email?: string;
+      name?: string;
+      location?: string;
+    },
+  ) {
+    try {
+      const data = await this.userRepository.update(id, payload);
+      if (!data) return false;
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateImage(id: string, url: string) {
+    try {
+      const data = await this.userRepository.update(id, { image: url });
+      if (!data) return false;
+      return true;
     } catch (error) {
       throw error;
     }

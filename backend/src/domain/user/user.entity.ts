@@ -4,7 +4,10 @@ import {
   PrimaryGeneratedColumn,
   Index,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Report } from '../report/report.entity';
+import { Point } from '../point/point.entity';
 
 export enum ROLE_USER {
   USER = 'user',
@@ -38,6 +41,7 @@ export class User implements IUser {
     length: 30,
     nullable: false,
   })
+  @Index('i_username')
   username: string;
 
   @Column({
@@ -47,7 +51,6 @@ export class User implements IUser {
     length: 317,
     nullable: false,
   })
-  @Index('i_email')
   email: string;
 
   @Column({ name: 'password', type: 'varchar', length: 255, nullable: false })
@@ -59,11 +62,23 @@ export class User implements IUser {
   @Column({ name: 'phone', type: 'varchar', length: 13, nullable: false })
   phone: string;
 
+  @Column({ name: 'image', type: 'varchar', length: 255, nullable: true })
+  image?: string;
+
+  @Column({ name: 'location', type: 'varchar', nullable: true })
+  location?: string;
+
   @Column({ enum: STATUS_USER, default: STATUS_USER.ACTIVE, type: 'enum' })
   status: STATUS_USER;
 
   @Column({ enum: ROLE_USER, default: ROLE_USER.USER, type: 'enum' })
   role: ROLE_USER;
+
+  @OneToMany(() => Report, (report) => report.user)
+  report: Report[];
+
+  @OneToMany(() => Point, (point) => point.user)
+  point: Point[];
 
   @CreateDateColumn({
     type: 'bigint',
