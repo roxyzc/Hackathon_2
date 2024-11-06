@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Navbar from '../../components/Navbar'; // Mengimpor Navbar
+import Navbar from '../../components/Navbar'; 
 
 export default function Register() {
   const router = useRouter();
@@ -11,7 +11,6 @@ export default function Register() {
     nama: '',
     email: '',
     no_hp: '',
-    nik: '',
     password: '',
     confirm_password: '',
   });
@@ -30,7 +29,7 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    const res = await fetch('http://localhost:4000/register', {
+    const res = await fetch('http://localhost:3000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -76,15 +75,6 @@ export default function Register() {
             name="no_hp"
             placeholder="Nomor Telepon"
             value={formData.no_hp}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:shadow-lg transition duration-300"
-            required
-          />
-          <input
-            type="text"
-            name="nik"
-            placeholder="Nomor Induk Keluarga (NIK)"
-            value={formData.nik}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:shadow-lg transition duration-300"
             required
