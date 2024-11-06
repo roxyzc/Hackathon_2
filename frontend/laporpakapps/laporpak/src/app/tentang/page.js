@@ -1,4 +1,4 @@
-// src/app/tentang/page.js atau src/pages/tentang.js
+// src/app/tentang/page.js 
 "use client";
 
 import { useState, useEffect } from 'react';
