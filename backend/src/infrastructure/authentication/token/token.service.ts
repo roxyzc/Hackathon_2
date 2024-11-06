@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 
 interface IPayload {
+  id: string;
   username: string;
-  email: string;
   role: string;
 }
 

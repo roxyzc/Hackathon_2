@@ -1,8 +1,8 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { UserService } from 'src/domain/user/user.service';
@@ -62,12 +62,12 @@ export class AuthService {
       );
 
       if (!decryptPassword) {
-        throw new BadRequestException('Incorrect password, please try again');
+        throw new UnauthorizedException('Incorrect password, please try again');
       }
 
       const token = await this.tokenService.generateToken({
+        id: user.user_id,
         username: user.username,
-        email: user.email,
         role: user.role,
       });
 
@@ -75,6 +75,28 @@ export class AuthService {
         msg: 'Login successful',
         success: true,
         token,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async me(id: string) {
+    try {
+      const user = await this.userService.findOneById(id);
+      const data = {
+        user_id: user.user_id,
+        username: user.username,
+        image: user.image,
+        role: user.role,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+      };
+
+      return {
+        msg: 'success',
+        success: true,
+        data,
       };
     } catch (error) {
       throw error;
