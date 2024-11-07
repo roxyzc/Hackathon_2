@@ -66,4 +66,15 @@ export class ReportService {
       throw error;
     }
   }
+
+  async findOneByReportAndUser(report_id: string, user_id: string) {
+    try {
+      const data = await this.reportRepository.findOneRelations(report_id);
+
+      if (data?.user?.user_id !== user_id) return null;
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

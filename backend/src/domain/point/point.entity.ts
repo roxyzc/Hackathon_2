@@ -1,3 +1,4 @@
+import { Report } from '../report/report.entity';
 import { User } from '../user/user.entity';
 import {
   Entity,
@@ -6,6 +7,7 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 interface IPoint {
@@ -39,6 +41,13 @@ export class Point implements IPoint {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'user_id' })
   user: User;
+
+  @OneToOne(() => Report, (report) => report.point, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'report' })
+  report?: Report;
 
   @CreateDateColumn({
     type: 'bigint',

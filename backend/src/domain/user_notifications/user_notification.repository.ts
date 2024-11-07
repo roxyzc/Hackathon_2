@@ -16,6 +16,7 @@ export class UserNotificationRepository {
     });
 
     if (!data) return null;
+
     return data;
   }
 

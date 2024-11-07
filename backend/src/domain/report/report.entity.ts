@@ -7,8 +7,10 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { UserNotification } from '../user_notifications/user_notification.entity';
+import { Point } from '../point/point.entity';
 
 export enum STATUS_REPORT {
   DIAJUKAN = 'diajukan',
@@ -85,6 +87,9 @@ export class Report implements IReport {
     (userNotification) => userNotification.report,
   )
   userNotification: UserNotification[];
+
+  @OneToOne(() => Point, (point) => point.report)
+  point?: Point;
 
   @CreateDateColumn({
     type: 'bigint',

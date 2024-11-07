@@ -3,6 +3,7 @@ import { EntityManager } from 'typeorm';
 import { PointRepository } from './point.repository';
 import { User } from '../user/user.entity';
 import { Point } from './point.entity';
+import { Report } from '../report/report.entity';
 
 @Injectable()
 export class PointService {
@@ -15,16 +16,19 @@ export class PointService {
     point,
     description,
     user,
+    report,
   }: {
     point: number;
     description: string;
     user: User;
+    report: Report;
   }): Point {
     try {
       return this.entityManager.create(Point, {
         point,
         description,
         user,
+        report,
       });
     } catch (error) {
       throw error;

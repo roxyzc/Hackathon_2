@@ -35,4 +35,18 @@ export class ReportRepository {
 
     return data;
   }
+
+  async findOneRelations(identifier: string): Promise<Report> {
+    const data = await this.reportRepository.findOne({
+      where: [{ report_id: identifier }, { no_report: identifier }],
+      relations: { user: true, point: true },
+      select: { user: { user_id: true } },
+    });
+
+    if (!data) {
+      return null;
+    }
+
+    return data;
+  }
 }

@@ -46,25 +46,26 @@ export class ReportService {
 
         if (!user) throw new NotFoundException('User not found');
 
-        const [transaction_report, transaction_point] = await Promise.all([
-          this.reportService.createTransactionReport({
-            ...payload,
-            description: payload.description.trim(),
-            no_report,
-            files: fileUrls,
-            user,
-          }),
-          this.pointService.createTransactionPoint({
-            point: 10,
-            description: 'Earned points for submitting a new report',
-            user,
-          }),
-        ]);
+        // const [transaction_report, transaction_point] = await Promise.all([
+        // this.pointService.createTransactionPoint({
+        //   point: 10,
+        //   description: 'Earned points for submitting a new report',
+        //   user,
+        // }),
+        // ]);
 
-        await this.pointService.saveTransactionPoint(
-          transaction_point,
-          entityManager,
-        );
+        // await this.pointService.saveTransactionPoint(
+        //   transaction_point,
+        //   entityManager,
+        // );
+
+        const transaction_report = this.reportService.createTransactionReport({
+          ...payload,
+          description: payload.description.trim(),
+          no_report,
+          files: fileUrls,
+          user,
+        });
 
         const report = await this.reportService.saveTransactionReport(
           transaction_report,
@@ -73,7 +74,7 @@ export class ReportService {
 
         const transaction_notification =
           this.userNotificationService.createTransactionNotification({
-            description: `Laporan kamu dengan nomor aduan ${no_report} telah berhasil diajukan! Terima kasih atas kontribusi kamu dalam melaporkan kondisi di sekitar. Saat ini, laporan kamu sedang diajukan ke tim terkait untuk ditindaklanjuti. Kamu bisa memantau perkembangan dan status terbaru dari laporan tersebut dengan mengunjungi halaman 'Lacak Aduan' di platform kami. Kami sangat menghargai peran aktifmu dalam menjaga dan membangun lingkungan yang lebih baik. Terus berpartisipasi untuk perubahan positif di komunitasmu!`,
+            description: `Laporan kamu dengan nomor aduan ${no_report} telah berhasil diverifikasi! Terima kasih atas kontribusi kamu dalam melaporkan kondisi di sekitar. Saat ini, laporan kamu sedang diajukan ke tim terkait untuk ditindaklanjuti. Kamu bisa memantau perkembangan dan status terbaru dari laporan tersebut dengan mengunjungi halaman 'Lacak Aduan' di platform kami. Kami sangat menghargai peran aktifmu dalam menjaga dan membangun lingkungan yang lebih baik. Terus berpartisipasi untuk perubahan positif di komunitasmu!`,
             report,
           });
         await this.userNotificationService.saveTransactionNotification(
